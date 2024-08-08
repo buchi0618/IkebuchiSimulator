@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="uavsim-main.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="parameters.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="uav.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="god.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="common_knowledge.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="cell.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="uav-move.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="uav-cellinfo.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ソースファイル">
+      <UniqueIdentifier>{68a81233-d2a3-4009-8d27-7e7bc1ed1d08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダファイル">
+      <UniqueIdentifier>{efd3b5d9-fb04-4e33-a7ee-95ea6351852d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="params">
+      <UniqueIdentifier>{0a9a424e-4eb6-4627-b1b4-bf5a11749b2d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cmdline.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="parameters.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="uav.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="god.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="common_knowledge.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="cell.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="simulator.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="rand_generator.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="file_writer.hpp">
+      <Filter>ヘッダファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="params\default.ini">
+      <Filter>params</Filter>
+    </None>
+    <None Include="Makefile" />
+  </ItemGroup>
+</Project>
