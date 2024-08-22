@@ -37,7 +37,7 @@ void UAV::move() {
 		moveNextlowcell();
 		break;
 	case MMode::Nomalmode:
-		movenomal();
+		moveLowcoverage();
 		break;
 	default:
 		std::cout << "Invalid Mobility Mode! (at UAV::move())" << std::endl;
@@ -207,5 +207,26 @@ void UAV::movenomal(){
  */
 
 void UAV::moveLowcoverage(){
+	std::vector<int> adjs = cKnow.getAdjCells(curCell);//現在地の隣接セル
+	//double mincov = 1.00;
+	// int mincovnum = -1;
+	// for(unsigned int i = 0; i < adjs.size(); i++){
+	// 	//
+	// 	if(coverageMap[adjs[i]] < mincov){
+	// 		mincov = coverageMap[adjs[i]];
+	// 		mincovnum = adjs[i];
+	// 	}else if(coverageMap[adjs[i]] == mincov){
+	// 		//
+	// 		if(mincovnum == -1){
+	// 			mincovnum = adjs[i];
+	// 		}
+	// 		if(minadjscov(i) <minadjscov(mincovnum) ){
+	// 			mincovnum = adjs[i];
+	// 		}
+	// 	}
+	// }
+	//curCell = mincovnum;
+    std::cout << "\n" <<minadjscov(curCell) << std::endl;  
+    return;
 	//
 }

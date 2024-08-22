@@ -71,8 +71,13 @@ void UAV::showAllInfo() {
 			std::cout << "\n ";
 			if ((i / params.getCellCols()) % 2 == 1) { std::cout << "  "; }
 		}
-		std::cout << "   " << setw(width) << right << UavAssignment[i] << ":";
-		std::cout << fixed << setprecision(precision) << coverageMap[i];
+		//std::cout << "   " << setw(width) << right << UavAssignment[i] << ":";
+        if(coverageMap[i] == 0.00 ){
+            std::cout << " --- " ;
+        }else{
+            std::cout << " " << fixed << setprecision(precision) << coverageMap[i];
+        }
+
 	}
 
 	std::cout << std::endl;

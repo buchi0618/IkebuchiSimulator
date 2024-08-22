@@ -59,3 +59,45 @@ double UAV::covAve(int start, int end){
 	//std::cout <<"coverageAve: "<< total / num <<endl;
 	return total / num;
 }
+
+/**
+ * @brief　カバレッジ共有
+ */
+void UAV::shareCovmap(UAV &uav1,UAV &uav2){
+    for(unsigned int i; i < coverageMap.size(); i++){
+        if(uav1.coverageMap[i] < uav2.coverageMap[i]){
+            //探索されているかどうかの更新
+            uav1.coverageMap[i] = uav2.coverageMap[i];
+        }else{
+            //
+            uav2.coverageMap[i] = uav1.coverageMap[i];
+        }
+    }
+	std::cout << "通信完了！"<< std::endl;
+}
+
+/**
+ * @brief  隣接セルの最小値を出力
+ */
+double UAV::minadjscov(int num){
+	//
+	std::vector<int> adjs = cKnow.getAdjCells(num);//現在地の隣接セル
+	double mincov  = 1.00;
+	int mincovnum = -1;
+	for(unsigned int i = 0;i < adjs.size();i++){
+		if(coverageMap[adjs[i]] < mincov){
+			mincov = coverageMap[adjs[i]]; 
+			mincovnum = adjs[i];
+		}else if(coverageMap[adjs[i] ] == mincov){
+			if(mincovnum == -1){
+				mincovnum = adjs[i];
+			}
+			if(minadjscov(adjs[i]) < minadjscov(mincovnum)){
+				mincov = coverageMap[adjs[i]];
+				mincov = adjs[i];
+			}
+		}
+	}
+	std::cout << mincov <<std::endl ;
+	return mincov;
+}

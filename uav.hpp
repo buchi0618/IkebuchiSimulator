@@ -64,5 +64,7 @@ public:
 	void arrive(unsigned int);	// 訪問（カバレッジを1.0に）
 	void attenuateCovMap();	// カバレッジマップ上でカバレッジ減衰
 	double covAve(int start, int end);
+	void shareCovmap(UAV &uav1,UAV &uav2);//カバレッジ共有
+	double minadjscov(int num);
 };
 

@@ -72,6 +72,14 @@ void runSim(unsigned int round) {
 			u.move();
 			cells[u.getCurCell()].UAVarrived();	// 実際のカバレッジも更新
 		}
+		//カバレッジ共有
+		for (size_t i = 0; i < uavs.size(); ++i) {
+        for (size_t j = i + 1; j < uavs.size(); ++j) {
+            //std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
+			uavs[i].shareCovmap(uavs[i],uavs[j]);
+			uavs[j].shareCovmap(uavs[j],uavs[i]);
+        }
+    }
 
 		//
 		// 各種ログ書き出し
