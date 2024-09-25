@@ -208,25 +208,37 @@ void UAV::movenomal(){
 
 void UAV::moveLowcoverage(){
 	std::vector<int> adjs = cKnow.getAdjCells(curCell);//現在地の隣接セル
-	//double mincov = 1.00;
-	// int mincovnum = -1;
-	// for(unsigned int i = 0; i < adjs.size(); i++){
-	// 	//
-	// 	if(coverageMap[adjs[i]] < mincov){
-	// 		mincov = coverageMap[adjs[i]];
-	// 		mincovnum = adjs[i];
-	// 	}else if(coverageMap[adjs[i]] == mincov){
-	// 		//
-	// 		if(mincovnum == -1){
-	// 			mincovnum = adjs[i];
-	// 		}
-	// 		if(minadjscov(i) <minadjscov(mincovnum) ){
-	// 			mincovnum = adjs[i];
-	// 		}
-	// 	}
-	// }
-	//curCell = mincovnum;
-    std::cout << "\n" <<minadjscov(curCell) << std::endl;  
+	std::vector<int> moveca;//移動候補
+	int move_num = -1;//移動するセル番号
+	moveca.push_back(curCell);
+	
+	for(unsigned int i = 0; i < adjs.size(); i++){
+		//
+		if(coverageMap[adjs[i]] < coverageMap[moveca[0]]){
+			moveca.clear();
+			moveca.push_back(adjs[i]);
+		}else if(coverageMap[moveca[0]] == coverageMap[adjs[i]]){
+			//
+			moveca.push_back(adjs[i]);
+		}
+	}
+	if(1 < moveca.size()){
+		//
+		//std::cout << "\nuav"<<id<<" :2以上あるよ" << std::endl;  s
+		double minValue = 1.00;
+		for(unsigned int i = 0; i < moveca.size();i++){
+			//
+			if(minadjscov(curCell,moveca[i]) < minValue){
+				minValue = minadjscov(curCell,moveca[i]);
+				move_num = moveca[i];
+			}
+		}
+		
+	}else{
+		move_num = moveca[0];
+	}
+	curCell = move_num;
+    std::cout << "\n" <<minadjscov(curCell,adjs[1]) << std::endl;  
     return;
 	//
 }

@@ -65,6 +65,6 @@ public:
 	void attenuateCovMap();	// カバレッジマップ上でカバレッジ減衰
 	double covAve(int start, int end);
 	void shareCovmap(UAV &uav1,UAV &uav2);//カバレッジ共有
-	double minadjscov(int num);
+	double minadjscov(int cur,int num);
 };
 

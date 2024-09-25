@@ -77,27 +77,28 @@ void UAV::shareCovmap(UAV &uav1,UAV &uav2){
 }
 
 /**
- * @brief  隣接セルの最小値を出力
+ * @brief  隣接セルの最小値を持つセル番号を出力
  */
-double UAV::minadjscov(int num){
+double UAV::minadjscov(int cur, int num){
 	//
-	std::vector<int> adjs = cKnow.getAdjCells(num);//現在地の隣接セル
-	double mincov  = 1.00;
-	int mincovnum = -1;
-	for(unsigned int i = 0;i < adjs.size();i++){
-		if(coverageMap[adjs[i]] < mincov){
-			mincov = coverageMap[adjs[i]]; 
-			mincovnum = adjs[i];
-		}else if(coverageMap[adjs[i] ] == mincov){
-			if(mincovnum == -1){
-				mincovnum = adjs[i];
+	//int dst = rGenerator.intBetween(0, moveca2.size() - 1);
+	std::vector<int> wasadjs = cKnow.getAdjCells(cur);
+	std::vector<int> adjs = cKnow.getAdjCells(num);
+	double minValue = 1.00;
+	for(unsigned int i = 0; i < adjs.size();i++){
+		//
+		for(unsigned int j = 0; j < wasadjs.size();j++){
+			//
+			if(adjs[i] != wasadjs[j]){
+				if(coverageMap[adjs[i]] < minValue){
+				//
+				minValue = coverageMap[adjs[i]];
+				}
 			}
-			if(minadjscov(adjs[i]) < minadjscov(mincovnum)){
-				mincov = coverageMap[adjs[i]];
-				mincov = adjs[i];
-			}
+			
 		}
+		
 	}
-	std::cout << mincov <<std::endl ;
-	return mincov;
+
+	return minValue;
 }
