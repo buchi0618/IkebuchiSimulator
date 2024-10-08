@@ -73,13 +73,19 @@ void runSim(unsigned int round) {
 			cells[u.getCurCell()].UAVarrived();	// 実際のカバレッジも更新
 		}
 		//カバレッジ共有
-		// for (size_t i = 0; i < uavs.size(); ++i) {
-        // for (size_t j = i + 1; j < uavs.size(); ++j) {
-        //     //std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
-		// 	uavs[i].shareCovmap(uavs[i],uavs[j]);
-		// 	uavs[j].shareCovmap(uavs[j],uavs[i]);
-        // 	}
-    	// }
+		for (size_t i = 0; i < uavs.size(); ++i) {
+			for (size_t j = i + 1; j < uavs.size(); ++j) {
+				//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
+
+				if(cKnow.isAdjacent(i,j)){
+					//
+					uavs[i].shareCovmap(uavs[i],uavs[j]);
+					uavs[j].shareCovmap(uavs[j],uavs[i]);
+					std::cout << "\n通信完了 : "<< uavs[i].getCurCell() <<" , " << uavs[j].getCurCell();
+				}
+				
+				}
+    	}
 
 		//
 		// 各種ログ書き出し

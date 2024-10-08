@@ -73,7 +73,7 @@ void UAV::shareCovmap(UAV &uav1,UAV &uav2){
             uav2.coverageMap[i] = uav1.coverageMap[i];
         }
     }
-	std::cout << "通信完了！"<< std::endl;
+	//std::cout << "通信完了！"<< std::endl;
 }
 
 /**

@@ -64,6 +64,8 @@ void Parameters::setFromIniFile(std::string filename) {
 		cellRows = _cellRows.get();
 	if (boost::optional<double> _covAttenuation = pt.get_optional<double>("env.coverageAttenuation"))
 		coverageAttenuation = _covAttenuation.get();
+	if (boost::optional<double> _threshold = pt.get_optional<double>("env.threshold"))
+		threshold = _threshold.get();
 
 	// [file]
 	if (boost::optional<string> _coverageLogFilePath = pt.get_optional<string>("file.coverageLogFilePath"))

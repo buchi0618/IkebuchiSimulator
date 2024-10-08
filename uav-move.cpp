@@ -238,7 +238,7 @@ void UAV::moveLowcoverage(){
 		move_num = moveca[0];
 	}
 	curCell = move_num;
-    std::cout << "\n" <<minadjscov(curCell,adjs[1]) << std::endl;  
+    //std::cout << "\n" <<minadjscov(curCell,adjs[1]) << std::endl;  
     return;
 	//
 }

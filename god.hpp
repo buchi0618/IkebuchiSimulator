@@ -8,5 +8,4 @@
 #include"cell.hpp"
 
 class God{
-
 };

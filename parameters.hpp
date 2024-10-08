@@ -18,7 +18,7 @@ class Parameters
 	unsigned int uavMoveLogNum;	// UAVの移動ログ記録セル数
 	int cellCols, cellRows;	// セル数（x方向、y方向）
 	double coverageAttenuation; // カバレッジの減衰量／ターン
-	double threshold;
+	double threshold; //閾値
 
 	// [file] 入出力ファイル関係
 	std::string coverageLogFilePath;
