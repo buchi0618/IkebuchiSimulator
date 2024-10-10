@@ -102,7 +102,20 @@ void runSim(unsigned int round) {
 			log += "\t" + to_string(c.getCoverage());
 		}
 		fWriter.writeLine(coverageLogFileName, log);
-
+		//
+		log = ""; 
+		for(auto &c : uavs){
+			log = "";
+			std::vector<double> cov = c.getCoverageMap();
+			std::string uavcoverageFileName = params.getUavcoverageFilePath() + std::to_string(c.getID()) + ".log";
+			fWriter.openFile(uavcoverageFileName);
+			log += "\t";
+			for(unsigned int i = 0; i < cov.size();i++){
+				log += to_string(cov[i]);
+			}
+			fWriter.writeLine(uavcoverageFileName, log);
+		}
+		
 		for (auto &u : uavs) {
 			u.showAllInfo();
 		}
@@ -110,6 +123,10 @@ void runSim(unsigned int round) {
 	}// 時間経過ココまで
 
 	// 各種書込み用ファイルクローズ
+	for(unsigned int i = 0; i < uavs.size(); i++ ){
+		std::string uavcoverageFilename = params.getUavcoverageFilePath() + std::to_string(i) + ".log";
+		fWriter.closeFile(uavcoverageFilename);
+	}
 	fWriter.closeFile(coverageLogFileName);
 	fWriter.closeFile(uavLocLogFileName);
 }

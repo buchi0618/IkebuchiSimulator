@@ -72,6 +72,8 @@ void Parameters::setFromIniFile(std::string filename) {
 		coverageLogFilePath = _coverageLogFilePath.get();
 	if (boost::optional<string> _uavLocLogFilePath = pt.get_optional<string>("file.uavLocLogFilePath"))
 		uavLocLogFilePath = _uavLocLogFilePath.get();
+	if (boost::optional<string> _uavcoverageFilePath = pt.get_optional<string>("file.uavcoverageFilePath"))
+		uavcoverageFilePath = _uavcoverageFilePath.get();
 
 #ifdef DEBUG
 	cout << "\nend: Parameters::setFromIniFile()";

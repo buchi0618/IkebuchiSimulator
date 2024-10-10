@@ -23,6 +23,7 @@ class Parameters
 	// [file] 入出力ファイル関係
 	std::string coverageLogFilePath;
 	std::string uavLocLogFilePath;
+	std::string uavcoverageFilePath;
 
 	// 設定ファイルを読み込んでパラメータを設定
 	void setFromIniFile(std::string);
@@ -43,6 +44,7 @@ public:
 	double getCovAttenuation() { return coverageAttenuation; }
 	std::string getCoverageLogFilePath() { return coverageLogFilePath; }
 	std::string getUavLocLogFilePath() { return uavLocLogFilePath; }
+	std::string getUavcoverageFilePath(){ return uavcoverageFilePath;}
 
 	int getCellNum() { return cellCols * cellRows; }
 	double getthreshold(){ return threshold; }
