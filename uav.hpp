@@ -40,6 +40,7 @@ public:
 	unsigned int getID() { return id; }
 	unsigned int getCurCell() { return curCell; }
 	std::vector<double> getCoverageMap() { return coverageMap; }
+	std::deque<int> getmovelog() { return moveLog;}
 
 	// setters
 
@@ -65,6 +66,7 @@ public:
 	void attenuateCovMap();	// カバレッジマップ上でカバレッジ減衰
 	double covAve(int start, int end);
 	void shareCovmap(UAV &uav1,UAV &uav2);//カバレッジ共有
-	double minadjscov(int cur,int num);
+	double minadjscov(int cur,int num);//隣接セルの最小値を出力する
+	
 };
 

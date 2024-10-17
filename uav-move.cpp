@@ -214,13 +214,17 @@ void UAV::moveLowcoverage(){
 	
 	for(unsigned int i = 0; i < adjs.size(); i++){
 		//
-		if(coverageMap[adjs[i]] < coverageMap[moveca[0]]){
-			moveca.clear();
-			moveca.push_back(adjs[i]);
-		}else if(coverageMap[moveca[0]] == coverageMap[adjs[i]]){
-			//
-			moveca.push_back(adjs[i]);
+		if(cKnow.exsistuav(adjs[i])){
+			if(coverageMap[adjs[i]] < coverageMap[moveca[0]]){
+				moveca.clear();
+				moveca.push_back(adjs[i]);
+			}else if(coverageMap[moveca[0]] == coverageMap[adjs[i]]){
+				//
+				moveca.push_back(adjs[i]);
+			}
 		}
+		
+
 	}
 	if(1 < moveca.size()){
 		//
@@ -228,10 +232,15 @@ void UAV::moveLowcoverage(){
 		double minValue = 1.00;
 		for(unsigned int i = 0; i < moveca.size();i++){
 			//
-			if(minadjscov(curCell,moveca[i]) < minValue){
-				minValue = minadjscov(curCell,moveca[i]);
-				move_num = moveca[i];
+			if(cKnow.exsistuav(moveca[i])){
+				if(minadjscov(curCell,moveca[i]) < minValue){
+					minValue = minadjscov(curCell,moveca[i]);
+					move_num = moveca[i];
+				}	
+			}else{
+				std::cout << "\nUAVが存在しています";
 			}
+				
 		}
 		
 	}else{

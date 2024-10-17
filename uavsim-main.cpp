@@ -53,6 +53,7 @@ void runSim(unsigned int round) {
 		// 設置したセルのカバレッジを1に（「UAV到着しました」関数で代用）
 		cells[uavs[i].getCurCell()].UAVarrived(i);
 	}
+	cKnow.generateUavexsistCells(uavs);
 	// 時間経過開始！
 	// ToDo: この中もうちょい整理しろやワレ。
 	for (unsigned int now = 0; now < params.getSimDuration(); now++) {
@@ -62,6 +63,20 @@ void runSim(unsigned int round) {
 		if ((now+1) % 10 == 0) { std::cout << "+"; }
 		else { std::cout << "-"; }
 #endif
+				//カバレッジ共有
+		for (size_t i = 0; i < uavs.size(); ++i) {
+			for (size_t j = i + 1; j < uavs.size(); ++j) {
+				//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
+
+				if(cKnow.isAdjacent(i,j)){
+					//
+					uavs[i].shareCovmap(uavs[i],uavs[j]);
+					uavs[j].shareCovmap(uavs[j],uavs[i]);
+					std::cout << "\n通信完了 : "<< uavs[i].getID() <<" , " << uavs[j].getID();
+				}
+				
+			}
+    	}
 		// 全セルカバレッジ減衰
 		for (auto &c : cells) {
 			c.attenuateCoverage();
@@ -71,21 +86,9 @@ void runSim(unsigned int round) {
 		for (auto &u: uavs){
 			u.move();
 			cells[u.getCurCell()].UAVarrived();	// 実際のカバレッジも更新
+			cKnow.setexsistuav(u);
 		}
-		//カバレッジ共有
-		for (size_t i = 0; i < uavs.size(); ++i) {
-			for (size_t j = i + 1; j < uavs.size(); ++j) {
-				//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
 
-				if(cKnow.isAdjacent(i,j)){
-					//
-					uavs[i].shareCovmap(uavs[i],uavs[j]);
-					uavs[j].shareCovmap(uavs[j],uavs[i]);
-					std::cout << "\n通信完了 : "<< uavs[i].getCurCell() <<" , " << uavs[j].getCurCell();
-				}
-				
-				}
-    	}
 
 		//
 		// 各種ログ書き出し
@@ -107,7 +110,7 @@ void runSim(unsigned int round) {
 		for(auto &c : uavs){
 			log = "";
 			std::vector<double> cov = c.getCoverageMap();
-			std::string uavcoverageFileName = params.getUavcoverageFilePath() + std::to_string(c.getID()) + ".log";
+			std::string uavcoverageFileName = params.getUavcoverageFilePath() + std::to_string(round) + "uav"+std::to_string(c.getID()) + ".log";
 			fWriter.openFile(uavcoverageFileName);
 			log += "\t";
 			for(unsigned int i = 0; i < cov.size();i++){
@@ -124,7 +127,7 @@ void runSim(unsigned int round) {
 
 	// 各種書込み用ファイルクローズ
 	for(unsigned int i = 0; i < uavs.size(); i++ ){
-		std::string uavcoverageFilename = params.getUavcoverageFilePath() + std::to_string(i) + ".log";
+		std::string uavcoverageFilename = params.getUavcoverageFilePath() + std::to_string(round) + "uav"+std::to_string(i) + ".log";
 		fWriter.closeFile(uavcoverageFilename);
 	}
 	fWriter.closeFile(coverageLogFileName);

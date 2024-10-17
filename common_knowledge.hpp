@@ -5,6 +5,8 @@
  * @date 2017/4/18
  */
 #include <vector>
+#include "simulator.hpp"
+#include "uav.hpp"
 
 class CommonKnowledge
 {
@@ -16,6 +18,9 @@ class CommonKnowledge
 
 	// セル間の距離
 	std::vector< std::vector<int> > distBetweenCells;
+
+	//UAVがいるかどうか：１はいる、０はいない
+	std::vector<int> uavexsistcells;
 	
 public:
 	CommonKnowledge() = default;
@@ -24,11 +29,14 @@ public:
 	void init(Parameters);	// initialize
 	void generateAdjCells(int, int);
 	void generateDistBetweenCells();
+	void generateUavexsistCells(std::vector<UAV>);
 
 	bool isAdjacent(int, int);	// セルは隣接している？
 	int adjCellOf(int, std::string);	// 特定セルの隣接セルID（方向指定）
 	std::vector<int> getAdjCells(int);	// あるセルに隣接しているセル群のID
 	int getDistance(int, int);	// セル間の距離
+	void setexsistuav(UAV);
+	bool exsistuav(int);//特定のセルにUAVがいるかどうか
 
 	// for debugging ////////////////////////////////////////////////
 	void showAllCellsInfo(void);	// show adjCells;

@@ -98,7 +98,26 @@ void CommonKnowledge::generateDistBetweenCells() {
 	std::cout << "\nend: CommonKnowledge::generateDistBetweenCells()";
 #endif
 }
+/**
+ * 
+ */
 
+void CommonKnowledge::generateUavexsistCells(std::vector<UAV> uavs){
+	//UAV存在行列を生成
+	uavexsistcells.resize(params.getCellNum());
+	for(unsigned int i = 0; i < uavexsistcells.size();i++){
+		uavexsistcells[i] = 0;
+	}
+
+	for(unsigned int i = 0; i < uavexsistcells.size(); i++ ){
+		for(unsigned int j = 0; j < uavs.size(); j++){
+			if(uavs[j].getCurCell() == i){
+				uavexsistcells[i]  = 1;
+				std::cout << "\n UAVがいるセルは"<< i;
+			}
+		}	
+	}
+}
 // 共有情報を初期化
 void CommonKnowledge::init(Parameters params) {
 #ifdef DEBUG
@@ -163,6 +182,43 @@ std::vector<int> CommonKnowledge::getAdjCells(int i) {
  */
 int CommonKnowledge::getDistance(int i, int j) {
 	return distBetweenCells[i][j];
+}
+
+/**
+ * そのセルにUAVがいるかどうか
+ */
+void CommonKnowledge::setexsistuav(UAV uavs){
+	//
+	std::deque<int> log = uavs.getmovelog();
+	for(unsigned int i = 0; i < uavexsistcells.size(); i++ ){
+		
+		if(log.front() == i){
+			uavexsistcells[i] = 0;
+			//std::cout << "\nここには存在していません" << i;
+		}
+		if(uavs.getCurCell() == i){
+			uavexsistcells[i]  = 1;
+			//std::cout << "\n UAVがいるセルは"<< i;
+		}
+	}
+	// std::cout << "\n";
+	// for(unsigned int i = 0; i < uavexsistcells.size(); i++){
+	// 	std::cout << " "<<uavexsistcells[i];
+	// }
+}
+
+bool CommonKnowledge::exsistuav(int cell_num){
+	//
+	//std::cout << "\n";
+	// for(unsigned int i = 0; i < uavexsistcells.size(); i++){
+	// 	std::cout << " "<<uavexsistcells[i];
+	// }
+	if(uavexsistcells[cell_num] == 1){
+		return false;
+	}else{
+		return true;
+	}
+	
 }
 
 // for debugging /////////////////////////////////////////////////////
