@@ -33,6 +33,7 @@ void UAV::arrive(unsigned int c) {
  * @brief カバレッジマップ上でカバレッジ減衰
  */
 void UAV::attenuateCovMap() {
+	//std::cout << "減衰!";
 	for (unsigned int c = 0; c < coverageMap.size(); c++) {
 		if (c != curCell) {
 			coverageMap[c] -= params.getCovAttenuation();

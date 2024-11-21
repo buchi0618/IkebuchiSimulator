@@ -14,6 +14,7 @@ class Parameters
 	unsigned int simDuration;	// シミュレーション試行あたりの時間（ターン数）
 
 	// [env] シミュレーション関係関係
+	int impAreaNum;//重点探索エリア数
 	int uavNum;	// UAV数
 	unsigned int uavMoveLogNum;	// UAVの移動ログ記録セル数
 	int cellCols, cellRows;	// セル数（x方向、y方向）
@@ -42,6 +43,7 @@ public:
 	int getCellCols() { return cellCols; }
 	int getCellRows() { return cellRows; }
 	double getCovAttenuation() { return coverageAttenuation; }
+	int getimpAreaNum(){ return impAreaNum;}
 	std::string getCoverageLogFilePath() { return coverageLogFilePath; }
 	std::string getUavLocLogFilePath() { return uavLocLogFilePath; }
 	std::string getUavcoverageFilePath(){ return uavcoverageFilePath;}

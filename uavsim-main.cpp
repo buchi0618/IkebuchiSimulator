@@ -40,7 +40,16 @@ void runSim(unsigned int round) {
 	for (unsigned int i = 0; i < cells.size(); i++) {
 		cells[i].setID(i);
 	}
-
+	//重点探索エリアを設定
+	for(int i = 0;i < params.getimpAreaNum();i++){
+		std::cout << "\n重点探索エリアを設定します";
+		int id = rGenerator.intBetween(0,params.getCellNum());
+		for(unsigned int j = 0; j < cells.size();j++){
+			if(static_cast<unsigned int>(id) == j){
+				cells[j].setArea();
+			}
+		}
+	}
 	// UAVを初期位置に配置
 	std::vector<UAV> uavs(params.getUavNum());
 	for (unsigned int i = 0; i < uavs.size(); i++) {
@@ -63,22 +72,11 @@ void runSim(unsigned int round) {
 		if ((now+1) % 10 == 0) { std::cout << "+"; }
 		else { std::cout << "-"; }
 #endif
-				//カバレッジ共有
-		for (size_t i = 0; i < uavs.size(); ++i) {
-			for (size_t j = i + 1; j < uavs.size(); ++j) {
-				//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
 
-				if(cKnow.isAdjacent(i,j)){
-					//
-					uavs[i].shareCovmap(uavs[i],uavs[j]);
-					uavs[j].shareCovmap(uavs[j],uavs[i]);
-					std::cout << "\n通信完了 : "<< uavs[i].getID() <<" , " << uavs[j].getID();
-				}
-				
-			}
-    	}
+
 		// 全セルカバレッジ減衰
 		for (auto &c : cells) {
+			//std::cout << "\n減衰！";
 			c.attenuateCoverage();
 		}
 
@@ -88,6 +86,21 @@ void runSim(unsigned int round) {
 			cells[u.getCurCell()].UAVarrived();	// 実際のカバレッジも更新
 			cKnow.setexsistuav(u);
 		}
+		//カバレッジ共有
+		for (unsigned int i = 0; i < uavs.size(); i++) {
+			for (unsigned int j = i + 1; j < uavs.size(); j++) {
+				//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
+
+				if(cKnow.isAdjacent(uavs[i].getCurCell(),uavs[j].getCurCell())){
+					//
+					//std::cout << "\n i:"<< uavs[i].getCurCell() << ", j:"<<uavs[j].getCurCell();
+					uavs[i].shareCovmap(uavs[i],uavs[j]);
+					uavs[j].shareCovmap(uavs[j],uavs[i]);
+					std::cout << "\n通信完了 : "<< uavs[i].getID() <<" , " << uavs[j].getID();
+				}
+				
+			}
+    	}
 
 
 		//
@@ -132,6 +145,8 @@ void runSim(unsigned int round) {
 	}
 	fWriter.closeFile(coverageLogFileName);
 	fWriter.closeFile(uavLocLogFileName);
+	std::cout <<"\n covrageAve: "<<god.generateCovaverage(cells);
+	std::cout <<"\n covrageVari: "<<god.generateCovvariance(cells);
 }
 
 

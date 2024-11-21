@@ -189,10 +189,10 @@ int CommonKnowledge::getDistance(int i, int j) {
  */
 void CommonKnowledge::setexsistuav(UAV uavs){
 	//
-	std::deque<int> log = uavs.getmovelog();
+	std::deque<int> logs = uavs.getmovelog();
 	for(unsigned int i = 0; i < uavexsistcells.size(); i++ ){
 		
-		if(log.front() == i){
+		if(static_cast<unsigned int>(logs.front()) == i){
 			uavexsistcells[i] = 0;
 			//std::cout << "\nここには存在していません" << i;
 		}
@@ -208,11 +208,11 @@ void CommonKnowledge::setexsistuav(UAV uavs){
 }
 
 bool CommonKnowledge::exsistuav(int cell_num){
-	//
-	//std::cout << "\n";
-	// for(unsigned int i = 0; i < uavexsistcells.size(); i++){
-	// 	std::cout << " "<<uavexsistcells[i];
-	// }
+	
+	/*std::cout << "\n";
+	 for(unsigned int i = 0; i < uavexsistcells.size(); i++){
+	 	std::cout << " "<<uavexsistcells[i];
+	 }*/
 	if(uavexsistcells[cell_num] == 1){
 		return false;
 	}else{

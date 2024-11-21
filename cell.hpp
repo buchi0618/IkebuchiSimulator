@@ -13,6 +13,7 @@ class Cell
 {
     int id;
     double coverage;  //カバレッジ値[0, 1]
+    int area = 0; //0:普通のセル、1:重点探索エリア
     std::vector<int> nbrCells; //隣接セル群のID
 
 public:
@@ -28,6 +29,7 @@ public:
 
     //setter
     void setID(int i){ id = i; }
+    void setArea();
 
     void attenuateCoverage();
     void UAVarrived();

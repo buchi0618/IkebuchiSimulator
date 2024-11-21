@@ -9,7 +9,11 @@
 
 //カバレッジ減衰
 void Cell::attenuateCoverage(){
-    coverage -= params.getCovAttenuation();
+    if(area == 0 ){
+        coverage -= params.getCovAttenuation();
+    }else{
+        coverage -= params.getCovAttenuation() * 2.0;
+    }
     if (coverage < 0){ coverage = 0; }
 }
 
@@ -23,4 +27,9 @@ void Cell::UAVarrived() {
 }
 void Cell::UAVarrived(int u) {
 	coverage = 1;
+}
+
+void Cell::setArea(){
+    area = 1;
+    std::cout << "\n重点探索エリアは"<< id << "です";
 }

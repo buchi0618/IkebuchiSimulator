@@ -66,6 +66,8 @@ void Parameters::setFromIniFile(std::string filename) {
 		coverageAttenuation = _covAttenuation.get();
 	if (boost::optional<double> _threshold = pt.get_optional<double>("env.threshold"))
 		threshold = _threshold.get();
+	if (boost::optional<int> _impAreaNum = pt.get_optional<int>("env.impAreaNum"))
+		impAreaNum = _impAreaNum.get();
 
 	// [file]
 	if (boost::optional<string> _coverageLogFilePath = pt.get_optional<string>("file.coverageLogFilePath"))
