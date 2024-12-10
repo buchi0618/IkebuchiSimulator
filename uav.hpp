@@ -3,6 +3,7 @@
 // UAV Class
 //
 #include <deque>
+#include "cell.hpp"
 
 class UAV
 {
@@ -17,7 +18,7 @@ class UAV
 	 * RANDOMWALK：ランダムウォーク
 	 * ROUNDTRIP: 往復移動
 	 */
-	enum class MMode { STOP, RANDOMWALK, ROUNDTRIP ,Nomalmode ,NEXTLOW };
+	enum class MMode { STOP, RANDOMWALK, ROUNDTRIP ,Nomalmode ,NEXTLOW,MOVEITO };
 	MMode mMode;
 
 	/** 移動方向
@@ -29,6 +30,7 @@ class UAV
 
 	// uav-cellinfo: セル情報関係 ///////////////////////////
 	std::vector<double> coverageMap;	// coverageMap
+	std::vector<unsigned int> Areainfo;
 	std::vector<int> UavAssignment;		// 担当マップ：各セルを担当しているUAVの情報
 
 public:
@@ -47,6 +49,7 @@ public:
 	// uav.cpp ////////////////////////////////////////////
 	void locateAtInitialCell(int);	// 初期配置
 	void init(unsigned int);	// もろもろ初期化
+	void setAreainfo(Cell cell);
 
 	void showAllInfo();	// (for debugging)全情報を出力
 
@@ -59,6 +62,7 @@ public:
 	void moveNextlowcell();
 	void movenomal();
 	void moveLowcoverage(); //平均カバレッジが低い方向へ移動
+	void moveito();
 
 	// uav-cellinfo.cpp ///////////////////////////////////
 	void init_cellInfo();	// 初期化

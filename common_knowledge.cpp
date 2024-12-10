@@ -113,7 +113,7 @@ void CommonKnowledge::generateUavexsistCells(std::vector<UAV> uavs){
 		for(unsigned int j = 0; j < uavs.size(); j++){
 			if(uavs[j].getCurCell() == i){
 				uavexsistcells[i]  = 1;
-				std::cout << "\n UAVがいるセルは"<< i;
+				//std::cout << "\n UAVがいるセルは"<< i;
 			}
 		}	
 	}
@@ -201,10 +201,11 @@ void CommonKnowledge::setexsistuav(UAV uavs){
 			//std::cout << "\n UAVがいるセルは"<< i;
 		}
 	}
-	// std::cout << "\n";
+	//std::cout << "\n";
 	// for(unsigned int i = 0; i < uavexsistcells.size(); i++){
 	// 	std::cout << " "<<uavexsistcells[i];
 	// }
+	//std::cout << " cell0 :" << uavexsistcells[0]<< "cell 20:" << uavexsistcells[20];
 }
 
 bool CommonKnowledge::exsistuav(int cell_num){
@@ -213,10 +214,12 @@ bool CommonKnowledge::exsistuav(int cell_num){
 	 for(unsigned int i = 0; i < uavexsistcells.size(); i++){
 	 	std::cout << " "<<uavexsistcells[i];
 	 }*/
-	if(uavexsistcells[cell_num] == 1){
-		return false;
-	}else{
-		return true;
+	//std::cout << " cell0 :" << uavexsistcells[0]<< "cell 20:" << uavexsistcells[20];
+	//std::cout << "\ncell" << cell_num<< " exsist:"<< uavexsistcells[0];
+	if(uavexsistcells[cell_num] == 0){
+		return false;//inai
+	}else if(uavexsistcells[cell_num] == 1){
+		return true;//iru
 	}
 	
 }

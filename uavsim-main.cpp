@@ -32,8 +32,12 @@ void runSim(unsigned int round) {
 	// 各種書込み用ファイルオープン
 	std::string coverageLogFileName = params.getCoverageLogFilePath() + std::to_string(round) + ".log";
 	std::string uavLocLogFileName = params.getUavLocLogFilePath() + std::to_string(round) + ".log";
+	std::string coverageAveFilename = params.getCoverageAveFilePath() +std::to_string(round) + ".log";
+	std::string coverageVariFilename = params.getCoverageVariFilePath() + std::to_string(round) + ".log";
 	fWriter.openFile(coverageLogFileName);
 	fWriter.openFile(uavLocLogFileName);
+	fWriter.openFile(coverageAveFilename);
+	fWriter.openFile(coverageVariFilename);
 
 	// セル数を初期化
 	std::vector<Cell> cells(params.getCellNum());
@@ -79,28 +83,29 @@ void runSim(unsigned int round) {
 			//std::cout << "\n減衰！";
 			c.attenuateCoverage();
 		}
+		//カバレッジ共有
+				for (unsigned int i = 0; i < uavs.size(); i++) {
+					for (unsigned int j = i + 1; j < uavs.size(); j++) {
+						//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
 
+						if(cKnow.isAdjacent(uavs[i].getCurCell(),uavs[j].getCurCell())){
+							//
+							//std::cout << "\n i:"<< uavs[i].getCurCell() << ", j:"<<uavs[j].getCurCell();
+							uavs[i].shareCovmap(uavs[i],uavs[j]);
+							uavs[j].shareCovmap(uavs[j],uavs[i]);
+							//std::cout << "\n通信完了 : "<< uavs[i].getID() <<" , " << uavs[j].getID();
+						}
+						
+					}
+				}
 		// UAV移動
 		for (auto &u: uavs){
 			u.move();
 			cells[u.getCurCell()].UAVarrived();	// 実際のカバレッジも更新
 			cKnow.setexsistuav(u);
+			u.setAreainfo(cells[u.getCurCell()]);
 		}
-		//カバレッジ共有
-		for (unsigned int i = 0; i < uavs.size(); i++) {
-			for (unsigned int j = i + 1; j < uavs.size(); j++) {
-				//std::cout << "\n(" << elements[i] << ", " << elements[j] << ")\n";
-
-				if(cKnow.isAdjacent(uavs[i].getCurCell(),uavs[j].getCurCell())){
-					//
-					//std::cout << "\n i:"<< uavs[i].getCurCell() << ", j:"<<uavs[j].getCurCell();
-					uavs[i].shareCovmap(uavs[i],uavs[j]);
-					uavs[j].shareCovmap(uavs[j],uavs[i]);
-					std::cout << "\n通信完了 : "<< uavs[i].getID() <<" , " << uavs[j].getID();
-				}
-				
-			}
-    	}
+		
 
 
 		//
@@ -131,7 +136,20 @@ void runSim(unsigned int round) {
 			}
 			fWriter.writeLine(uavcoverageFileName, log);
 		}
+		//
+		log = "";
+		log += "\t";
+		double coverageAve = god.generateCovaverage(cells);
+		log += to_string(coverageAve);
+		fWriter.writeLine(coverageAveFilename, log);
+
+		log = "";
+		log += "\t";
+		double coverageVari = god.generateCovvariance(cells);
+		log += to_string(coverageVari);
+		fWriter.writeLine(coverageVariFilename, log);
 		
+		//UAVのカバレッジを出力
 		for (auto &u : uavs) {
 			u.showAllInfo();
 		}
@@ -145,8 +163,10 @@ void runSim(unsigned int round) {
 	}
 	fWriter.closeFile(coverageLogFileName);
 	fWriter.closeFile(uavLocLogFileName);
-	std::cout <<"\n covrageAve: "<<god.generateCovaverage(cells);
-	std::cout <<"\n covrageVari: "<<god.generateCovvariance(cells);
+	fWriter.closeFile(coverageAveFilename);
+	fWriter.closeFile(coverageVariFilename);
+	//std::cout <<"\n covrageAve: "<<god.generateCovaverage(cells);
+	//std::cout <<"\n covrageVari: "<<god.generateCovvariance(cells);
 }
 
 

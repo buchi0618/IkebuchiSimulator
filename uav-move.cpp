@@ -6,6 +6,7 @@
 #include "simulator.hpp"
 #include "uav.hpp"
 #include "cell.hpp"
+#include <algorithm>
 
 /**
  * @brief 初期化
@@ -26,7 +27,7 @@ void UAV::move() {
 	// とりあえずランダムウォーク
 	switch (mMode) {
 	case MMode::STOP:
-		mMode = MMode::Nomalmode;
+		mMode = MMode::MOVEITO;
 	case MMode::RANDOMWALK:
 		moveRandomWalk();
 		break;
@@ -39,12 +40,16 @@ void UAV::move() {
 	case MMode::Nomalmode:
 		moveLowcoverage();
 		break;
+	case MMode::MOVEITO:
+		moveito();
+		break;
 	default:
 		std::cout << "Invalid Mobility Mode! (at UAV::move())" << std::endl;
 		exit(1);
 	}
 
 	// 到着処理
+	//std::cout << "\nuav" << id << " : "<<curCell;
 	arrive(curCell);	// 到着したセルのカバレッジを1に
 	attenuateCovMap();	// カバレッジマップでカバレッジ減衰
 }
@@ -214,7 +219,7 @@ void UAV::moveLowcoverage(){
 	
 	for(unsigned int i = 0; i < adjs.size(); i++){
 		//
-		if(cKnow.exsistuav(adjs[i])){
+		if(cKnow.exsistuav(adjs[i]) == false){
 			if(coverageMap[adjs[i]] < coverageMap[moveca[0]]){
 				moveca.clear();
 				moveca.push_back(adjs[i]);
@@ -226,28 +231,101 @@ void UAV::moveLowcoverage(){
 		
 
 	}
+	for(unsigned int i = 0; i < moveca.size();i++){
+			std::cout << "\nUAV"<< id <<"moveca : "<< moveca[i];
+		}
 	if(1 < moveca.size()){
 		//
-		//std::cout << "\nuav"<<id<<" :2以上あるよ" << std::endl;  s
+		//std::cout << "\nuav"<<id<<" :2以上あるよ"; 
 		double minValue = 1.00;
 		for(unsigned int i = 0; i < moveca.size();i++){
 			//
-			if(cKnow.exsistuav(moveca[i])){
-				if(minadjscov(curCell,moveca[i]) < minValue){
+			//std::cout << "\n bool"<<cKnow.exsistuav(moveca[i]) ;
+			std::vector<int> moveca2;
+			if(cKnow.exsistuav(moveca[i]) == false){
+				std::cout << "\nmin : "<<minadjscov(curCell,moveca[i])<< std::endl;
+				if(minadjscov(curCell,moveca[i]) < minValue){ 
 					minValue = minadjscov(curCell,moveca[i]);
 					move_num = moveca[i];
-				}	
-			}else{
+					//std::cout << "\nUAV"<< id <<"movenum : "<< move_num;
+				}else if(minadjscov(curCell,moveca[i] == minValue)){
+					//move_num = curCell;
+				}
+				
+			}else if(cKnow.exsistuav(moveca[i]) == true){
 				std::cout << "\nUAVが存在しています";
 			}
-				
+			//std::cout << "\nUAV"<< id <<"curCell : "<< curCell << "moveca :" << moveca[i];
 		}
 		
-	}else{
+	}else if(1 == moveca.size() ){
+		//std::cout << "\nUAV"<< id <<"curCell : "<< curCell << "moveca :" << moveca[0];
 		move_num = moveca[0];
+		//std::cout << "UAV"<< id <<"move_num : "<< move_num<< "\n";
 	}
+	// for(unsigned int i = 0; i < moveca.size();i++){
+	// 		std::cout << "\nUAV"<< id <<"moveca : "<< moveca[i];
+	// 	}
+	std::cout << "\nUAV"<< id <<"move_num : "<< move_num<< " curcell :" << curCell;
 	curCell = move_num;
+	//std::cout << "UAV"<< id <<"curCell : "<< curCell << "\n";
     //std::cout << "\n" <<minadjscov(curCell,adjs[1]) << std::endl;  
     return;
 	//
+}
+
+
+/**
+ * @brief ito手法 改
+ */
+
+void UAV::moveito(){
+	std::vector<int> adjs = cKnow.getAdjCells(curCell);//現在地の隣接セル
+	std::vector<double> adjsCov;//隣接セルのカバレッジの値
+	std::vector<int> moveca;//移動候補
+	moveca.push_back(curCell);
+	std::vector<int> movepriority;
+
+	for(unsigned int i = 0; i < adjs.size(); i++){
+		//
+		adjsCov.push_back(coverageMap[adjs[i]]);
+	}
+
+	std::vector<std::pair<double,int>> CellnumArray;
+	for (unsigned int i = 0; i < adjsCov.size(); i++ ){
+		CellnumArray.emplace_back(adjsCov[i],adjs[i]);
+	}
+
+	std::sort(CellnumArray.begin(), CellnumArray.end());
+
+	// // 同じ値をグループ化して出力
+    // std::cout << "同じ値を持つペア:" << std::endl;
+    // int current_value = pairs[0].first;
+    // std::vector<int> Cellnum; // 現在の値に対応するインデックスリスト
+
+    // for (const auto& pair : pairs) {
+    //     if (pair.first == current_value) {
+    //         Cellnum.push_back(pair.second); // 同じ値のインデックスを追加
+    //     } else {
+    //         if (Cellnum.size() > 1) { // 重複があった場合のみ出力
+    //             std::cout << "値: " << current_value << " -> インデックス: ";
+    //             for (int index : indices) {
+    //                 std::cout << index << " ";
+    //             }
+    //             std::cout << std::endl;
+    //         }
+    //         // 新しい値に切り替え
+    //         current_value = pair.first;
+    //         indices = {pair.second};
+    //     }
+    // }
+
+	for(unsigned int i = 0; i < adjs.size();i++){
+		if(cKnow.exsistuav(CellnumArray[i].second) == false){
+			curCell = CellnumArray[i].second;
+			return;
+		}else{
+			std::cout << "UAV EXSIST!!" <<std::endl;
+		}
+	}
 }
