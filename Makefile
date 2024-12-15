@@ -1,7 +1,7 @@
 #Makefile
 CXX = g++
 TARGET = uavsim
-CXXFLAGS = -O2 -std=c++11 -Wall -pipe
+CXXFLAGS = -O2 -std=c++14 -Wall -pipe
 LDFLAGS = -lm
 SRCS = uavsim-main.cpp common_knowledge.cpp god.cpp parameters.cpp uav.cpp uav-move.cpp uav-cellinfo.cpp cell.cpp
 OBJS = $(SRCS:.cpp=.o)

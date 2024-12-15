@@ -243,12 +243,12 @@ void UAV::moveLowcoverage(){
 			//std::cout << "\n bool"<<cKnow.exsistuav(moveca[i]) ;
 			std::vector<int> moveca2;
 			if(cKnow.exsistuav(moveca[i]) == false){
-				std::cout << "\nmin : "<<minadjscov(curCell,moveca[i])<< std::endl;
-				if(minadjscov(curCell,moveca[i]) < minValue){ 
-					minValue = minadjscov(curCell,moveca[i]);
+				std::cout << "\nmin : "<<minadjscov(moveca[i])<< std::endl;
+				if(minadjscov(moveca[i]) < minValue){ 
+					minValue = minadjscov(moveca[i]);
 					move_num = moveca[i];
 					//std::cout << "\nUAV"<< id <<"movenum : "<< move_num;
-				}else if(minadjscov(curCell,moveca[i] == minValue)){
+				}else if(minadjscov(moveca[i]) == minValue){
 					//move_num = curCell;
 				}
 				
@@ -296,29 +296,14 @@ void UAV::moveito(){
 		CellnumArray.emplace_back(adjsCov[i],adjs[i]);
 	}
 
-	std::sort(CellnumArray.begin(), CellnumArray.end());
+	std::sort(CellnumArray.begin(), CellnumArray.end(), [this](const auto& a, const auto& b) {
+        if (a.first != b.first) {
+            return a.first < b.first; // 値1で昇順
+        }
+        return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+    });
 
-	// // 同じ値をグループ化して出力
-    // std::cout << "同じ値を持つペア:" << std::endl;
-    // int current_value = pairs[0].first;
-    // std::vector<int> Cellnum; // 現在の値に対応するインデックスリスト
-
-    // for (const auto& pair : pairs) {
-    //     if (pair.first == current_value) {
-    //         Cellnum.push_back(pair.second); // 同じ値のインデックスを追加
-    //     } else {
-    //         if (Cellnum.size() > 1) { // 重複があった場合のみ出力
-    //             std::cout << "値: " << current_value << " -> インデックス: ";
-    //             for (int index : indices) {
-    //                 std::cout << index << " ";
-    //             }
-    //             std::cout << std::endl;
-    //         }
-    //         // 新しい値に切り替え
-    //         current_value = pair.first;
-    //         indices = {pair.second};
-    //     }
-    // }
+	//std::cout << "UAV: "<< id << "CellnumArray: "<< CellnumArray.size() << std::endl;
 
 	for(unsigned int i = 0; i < adjs.size();i++){
 		if(cKnow.exsistuav(CellnumArray[i].second) == false){
