@@ -27,6 +27,8 @@ class Parameters
 	std::string uavcoverageFilePath;
 	std::string coverageAveFilePath;
 	std::string coverageVariFilePath;
+	std::string impcoverageFilePath;
+	std::string impAreanumsFilePath;
 
 	// 設定ファイルを読み込んでパラメータを設定
 	void setFromIniFile(std::string);
@@ -51,6 +53,8 @@ public:
 	std::string getUavcoverageFilePath(){ return uavcoverageFilePath;}
 	std::string getCoverageAveFilePath(){ return coverageAveFilePath;}
 	std::string getCoverageVariFilePath(){ return coverageVariFilePath;}
+	std::string getImpCoveragefilePath(){ return impcoverageFilePath;}
+	std::string getimpAreaNumsFilePath(){ return impAreanumsFilePath;}
 	int getCellNum() { return cellCols * cellRows; }
 	double getthreshold(){ return threshold; }
 

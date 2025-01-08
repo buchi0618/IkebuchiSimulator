@@ -97,45 +97,6 @@ void UAV::shareCovmap(UAV &uav1,UAV &uav2){
 	//std::cout << "通信完了！"<< std::endl;
 }
 
-/**
- * @brief  隣接セルの最小値を持つセル番号を出力
- */
-// double UAV::minadjscov(int num){
-// 	//
-// 	//int dst = rGenerator.intBetween(0, moveca2.size() - 1);
-// 	std::vector<int> wasadjs = cKnow.getAdjCells(curCell);
-// 	std::vector<int> adjs = cKnow.getAdjCells(num);
-// 	double minValue = 1.00;
-// 	// for(unsigned int i = 0; i < wasadjs.size();i++){
-// 	// 	std::cout << "\nwasadjs " << wasadjs[i];
-// 	// }
-
-// 	// for(unsigned int i = 0; i < adjs.size();i++){
-// 	// 	std::cout << "\nadjs " << adjs[i];
-// 	// }
-
-// 	for(unsigned int i = 0; i < adjs.size();i++){
-// 		//
-// 		for(unsigned int j = 0; j < wasadjs.size();j++){
-// 			//
-// 			if(adjs[i] != wasadjs[j]){
-// 				if(coverageMap[adjs[i]] < minValue){
-// 				//
-// 				//std::cout << "\ncelladjs" << adjs[i] << " coverage " << coverageMap[adjs[i]];
-// 				minValue = coverageMap[adjs[i]];
-// 				}
-// 			}else if(adjs[i] == 0 || adjs[i] == params.getCellCols() - 1 || adjs[i] == (params.getCellRows() - 1) * params.getCellCols() + 1 || adjs[i]  == params.getCellNum() - 1){
-// 				//角の時
-// 				std::cout << "\nUAV : "<< id <<"curcell :"<< curCell<<" 角です: " << adjs[i] ;
-// 				minValue = coverageMap[adjs[i]];
-// 			}
-			
-// 		}
-		
-// 	}
-
-// 	return minValue;
-// }
 
 
 double UAV::minadjscov(int num){
@@ -175,8 +136,8 @@ double UAV::minadjscov(int num){
 	}
 	
 	//std::cout << "UAV: "<< id << "num: "<< num <<"numsCov " << numsCov.size()<< std::endl;
-	std::cout << CellCols - 1 << " " << (CellRows - 1) * CellCols << " " << CellCols * CellRows - 1  << std::endl;
-	std::cout << CellCols  << " " << (CellRows - 2) * CellCols << " " << (CellRows - 1) * CellCols + 1 << std::endl;
+	//std::cout << CellCols - 1 << " " << (CellRows - 1) * CellCols << " " << CellCols * CellRows - 1  << std::endl;
+	//std::cout << CellCols  << " " << (CellRows - 2) * CellCols << " " << (CellRows - 1) * CellCols + 1 << std::endl;
 	if(intcurCell == 1 || intcurCell == CellCols || intcurCell == (CellRows - 2) * CellCols || intcurCell == (CellRows - 1) * CellCols + 1){
 		if(num == 0 || num == CellCols - 1 || num == (CellRows - 1) * CellCols || num == CellCols * CellRows - 1 ){
 			numsCov.push_back(coverageMap[num]);
@@ -215,7 +176,11 @@ double UAV::minadjscov(int num){
 void UAV::setAreainfo(Cell cell){
 	if(cell.getArea() == 1){
 		Areainfo[cell.getId()] = cell.getArea();
+		if(TcCellnum < 0){
+			TcCellnum = cell.getId();
+		}
 		std::cout << "\nUAVが到着した重点探索エリアは :"<< cell.getId()<<"です";
+		std::cout << "\nUAV"<< id <<"が担当する重点探索エリアは :"<< TcCellnum<<"です";
 	}
 	
 }

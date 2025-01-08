@@ -27,7 +27,7 @@ void UAV::move() {
 	// とりあえずランダムウォーク
 	switch (mMode) {
 	case MMode::STOP:
-		mMode = MMode::MOVEITO;
+		mMode = MMode::MOVEIKEBUCHI;
 	case MMode::RANDOMWALK:
 		moveRandomWalk();
 		break;
@@ -42,6 +42,9 @@ void UAV::move() {
 		break;
 	case MMode::MOVEITO:
 		moveito();
+		break;
+	case MMode::MOVEIKEBUCHI:
+		moveikebuchi();
 		break;
 	default:
 		std::cout << "Invalid Mobility Mode! (at UAV::move())" << std::endl;
@@ -253,7 +256,7 @@ void UAV::moveLowcoverage(){
 				}
 				
 			}else if(cKnow.exsistuav(moveca[i]) == true){
-				std::cout << "\nUAVが存在しています";
+				//std::cout << "\nUAVが存在しています";
 			}
 			//std::cout << "\nUAV"<< id <<"curCell : "<< curCell << "moveca :" << moveca[i];
 		}
@@ -310,7 +313,315 @@ void UAV::moveito(){
 			curCell = CellnumArray[i].second;
 			return;
 		}else{
-			std::cout << "UAV EXSIST!!" <<std::endl;
+			//std::cout << "UAV EXSIST!!" <<std::endl;
+		}
+	}
+}
+
+/**
+ * @brief ikebuchi手法
+ */
+
+void UAV::moveikebuchi(){
+	//
+	if(TcCellnum < 0){
+		std::vector<int> adjs = cKnow.getAdjCells(curCell);//現在地の隣接セル
+		std::vector<double> adjsCov;//隣接セルのカバレッジの値
+		std::vector<int> moveca;//移動候補
+		moveca.push_back(curCell);
+		std::vector<int> movepriority;
+
+		for(unsigned int i = 0; i < adjs.size(); i++){
+			//
+			adjsCov.push_back(coverageMap[adjs[i]]);
+		}
+
+		std::vector<std::pair<double,int>> CellnumArray;
+		for (unsigned int i = 0; i < adjsCov.size(); i++ ){
+			CellnumArray.emplace_back(adjsCov[i],adjs[i]);
+		}
+
+		std::sort(CellnumArray.begin(), CellnumArray.end(), [this](const auto& a, const auto& b) {
+			if (a.first != b.first) {
+				return a.first < b.first; // 値1で昇順
+			}
+			return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+		});
+
+		//std::cout << "UAV: "<< id << "CellnumArray: "<< CellnumArray.size() << std::endl;
+
+		for(unsigned int i = 0; i < adjs.size();i++){
+			if(cKnow.exsistuav(CellnumArray[i].second) == false){
+				curCell = CellnumArray[i].second;
+				return;
+			}else{
+				//std::cout << "UAV EXSIST!!" <<std::endl;
+			}
+		}
+	}else{
+		if(coverageMap[TcCellnum] < params.getthreshold()){
+			int direction = cKnow.getDirection(curCell,TcCellnum);
+			std::cout << "重点探索エリア"<<TcCellnum<<"は閾値を下回っています" << std::endl; 
+			std::cout << "現在地は" << curCell << "です" << std::endl;
+			std::cout << "位置は" << direction << "です"<< std::endl;
+			
+			std::vector<std::pair<double,int>> movepriorities;
+			int Cellnum;
+			if(direction == 0){
+				//右
+				Cellnum = cKnow.adjCellOf(curCell,"r");
+				if(cKnow.exsistuav(Cellnum) == false){
+					curCell = Cellnum;
+				}
+			}else if(direction == 1){
+				//右上
+				Cellnum = cKnow.adjCellOf(curCell,"ur");
+				if(cKnow.exsistuav(Cellnum) == false){
+					curCell = Cellnum;
+				}
+			}else if(direction == 2){
+				//上
+				Cellnum = cKnow.adjCellOf(curCell,"ur");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				Cellnum = cKnow.adjCellOf(curCell,"ul");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 3){
+				//左上
+				Cellnum = cKnow.adjCellOf(curCell,"ul");
+				if(cKnow.exsistuav(Cellnum) == false){
+					curCell = Cellnum;
+				}
+			}else if(direction == 4){
+				//左
+				Cellnum = cKnow.adjCellOf(curCell,"l");
+				if(cKnow.exsistuav(Cellnum) == false){
+					curCell = Cellnum;
+				}
+			}else if(direction == 5){
+				//左下
+				Cellnum = cKnow.adjCellOf(curCell,"ll");
+				if(cKnow.exsistuav(Cellnum) == false){
+					curCell = Cellnum;
+				}
+			}else if(direction == 6){
+				//下
+				Cellnum = cKnow.adjCellOf(curCell,"lr");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				Cellnum = cKnow.adjCellOf(curCell,"ll");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 7){
+				//右下
+				Cellnum = cKnow.adjCellOf(curCell,"lr");
+				if(cKnow.exsistuav(Cellnum) == false){
+					curCell = Cellnum;
+				}
+			}else if(direction == 8){
+				//左上左
+				Cellnum = cKnow.adjCellOf(curCell,"l");
+				movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				Cellnum = cKnow.adjCellOf(curCell,"ul");
+				movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						//std::cout << "curcell case 8: " << Cellnum << std::endl;
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 9){
+				//約上
+				Cellnum = cKnow.adjCellOf(curCell,"ur");
+				//std::cout << "ur: " << Cellnum << std::endl;
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				Cellnum = cKnow.adjCellOf(curCell,"ul");
+				//std::cout << "ul: " << Cellnum << std::endl;
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 10){
+				//右上右
+				Cellnum = cKnow.adjCellOf(curCell,"ur");
+				movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				Cellnum = cKnow.adjCellOf(curCell,"r");
+				movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 11){
+				//左下左
+				Cellnum = cKnow.adjCellOf(curCell,"ll");
+				movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				Cellnum = cKnow.adjCellOf(curCell,"l");
+				movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						//std::cout << "curcell case 11: " << Cellnum << std::endl;
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 12){
+				//約下
+				Cellnum = cKnow.adjCellOf(curCell,"lr");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				Cellnum = cKnow.adjCellOf(curCell,"ll");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}else if(direction == 13){
+				//右下右
+				Cellnum = cKnow.adjCellOf(curCell,"lr");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				Cellnum = cKnow.adjCellOf(curCell,"r");
+				if(Cellnum >= 0){
+					movepriorities.emplace_back(coverageMap[Cellnum],Cellnum);
+				}
+				std::sort(movepriorities.begin(), movepriorities.end(), [this](const auto& a, const auto& b) {
+					if (a.first != b.first) {
+						return a.first < b.first; // 値1で昇順
+					}
+					return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+				});
+				for(unsigned int i = 0; i < movepriorities.size();i++){
+					if(cKnow.exsistuav(movepriorities[i].second) == false){
+						curCell = movepriorities[i].second;
+						return;
+					}else{
+						//std::cout << "UAV EXSIST!!" <<std::endl;
+					}
+				}
+			}
+		}else{
+			std::vector<int> adjs = cKnow.getAdjCells(curCell);//現在地の隣接セル
+			std::vector<double> adjsCov;//隣接セルのカバレッジの値
+			std::vector<int> moveca;//移動候補
+			moveca.push_back(curCell);
+			std::vector<int> movepriority;
+
+			for(unsigned int i = 0; i < adjs.size(); i++){
+				//
+				adjsCov.push_back(coverageMap[adjs[i]]);
+			}
+
+			std::vector<std::pair<double,int>> CellnumArray;
+			for (unsigned int i = 0; i < adjsCov.size(); i++ ){
+				CellnumArray.emplace_back(adjsCov[i],adjs[i]);
+			}
+
+			std::sort(CellnumArray.begin(), CellnumArray.end(), [this](const auto& a, const auto& b) {
+				if (a.first != b.first) {
+					return a.first < b.first; // 値1で昇順
+				}
+				return minadjscov(a.second) < minadjscov(b.second); // 値2で昇順
+			});
+
+			//std::cout << "UAV: "<< id << "CellnumArray: "<< CellnumArray.size() << std::endl;
+
+			for(unsigned int i = 0; i < adjs.size();i++){
+				if(cKnow.exsistuav(CellnumArray[i].second) == false){
+					curCell = CellnumArray[i].second;
+					return;
+				}else{
+					//std::cout << "UAV EXSIST!!" <<std::endl;
+				}
+			}
 		}
 	}
 }

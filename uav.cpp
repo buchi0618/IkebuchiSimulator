@@ -46,7 +46,7 @@ void UAV::showAllInfo() {
 	std::cout << ")";
 
 	// セル情報
-	unsigned int width = ((params.getUavNum() - 1) / 10) + 1;
+	//unsigned int width = ((params.getUavNum() - 1) / 10) + 1;
 	std::string temp = std::to_string(params.getCovAttenuation());
 	std::reverse(temp.begin(), temp.end());
 	bool flag = false;

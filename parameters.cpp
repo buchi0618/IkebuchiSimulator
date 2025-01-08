@@ -80,7 +80,10 @@ void Parameters::setFromIniFile(std::string filename) {
 		coverageAveFilePath = _coverageAveFilePath.get();
 	if (boost::optional<string> _coverageVariFilePath = pt.get_optional<string>("file.coverageVariFilePath"))
 		coverageVariFilePath = _coverageVariFilePath.get();
-
+	if (boost::optional<string> _impcoverageFilePath = pt.get_optional<string>("file.impcoverageFilePath"))
+		impcoverageFilePath = _impcoverageFilePath.get();
+	if (boost::optional<string> _impAreanumsFilePath = pt.get_optional<string>("file.impAreanumsFilePath"))
+		impAreanumsFilePath = _impAreanumsFilePath.get();
 #ifdef DEBUG
 	cout << "\nend: Parameters::setFromIniFile()";
 #endif

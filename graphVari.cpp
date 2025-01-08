@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
     std::vector<std::string> filepaths;
     for(unsigned int i = 0;i < params.getSimIteration();i++){
         //
-        std::string filepath = "logs/coverageVari" + std::to_string(i) + ".log";
+        std::string filepath = params.getCoverageVariFilePath() + std::to_string(i) + ".log";
         filepaths.push_back(filepath);
     }
     //debug
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]){
     system("gnuplot gnuplot_script.gp");
 
     // 一時ファイルを削除（必要に応じて）
-    std::remove("temp_data.txt");
+    //std::remove("temp_data.txt");
     std::remove("gnuplot_script.gp");
     return 0;
 }

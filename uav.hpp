@@ -18,7 +18,7 @@ class UAV
 	 * RANDOMWALK：ランダムウォーク
 	 * ROUNDTRIP: 往復移動
 	 */
-	enum class MMode { STOP, RANDOMWALK, ROUNDTRIP ,Nomalmode ,NEXTLOW,MOVEITO };
+	enum class MMode { STOP, RANDOMWALK, ROUNDTRIP ,Nomalmode ,NEXTLOW,MOVEITO,MOVEIKEBUCHI };
 	MMode mMode;
 
 	/** 移動方向
@@ -29,6 +29,7 @@ class UAV
 	MDirection mDirection;
 
 	// uav-cellinfo: セル情報関係 ///////////////////////////
+	int TcCellnum = -1;//担当する重点探索エリアの番号
 	std::vector<double> coverageMap;	// coverageMap
 	std::vector<unsigned int> Areainfo;
 	std::vector<int> UavAssignment;		// 担当マップ：各セルを担当しているUAVの情報
@@ -49,7 +50,7 @@ public:
 	// uav.cpp ////////////////////////////////////////////
 	void locateAtInitialCell(int);	// 初期配置
 	void init(unsigned int);	// もろもろ初期化
-	void setAreainfo(Cell cell);
+	
 
 	void showAllInfo();	// (for debugging)全情報を出力
 
@@ -63,6 +64,7 @@ public:
 	void movenomal();
 	void moveLowcoverage(); //平均カバレッジが低い方向へ移動
 	void moveito();
+	void moveikebuchi();
 
 	// uav-cellinfo.cpp ///////////////////////////////////
 	void init_cellInfo();	// 初期化
@@ -73,6 +75,6 @@ public:
 	double minadjscov(int num);//隣接セルの最小値を出力する
 	static bool comparePairs(std::pair<double, int>& a,std::pair<double,int>& b);
 	std::vector<int> getSymmetricDifference(const std::vector<int>& array1, const std::vector<int>& array2);
-	
+	void setAreainfo(Cell cell);
 };
 

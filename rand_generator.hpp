@@ -6,6 +6,7 @@
  */
 
 #include <random>
+#include <algorithm>
 #include <time.h>
 
 class RandGenerator {
@@ -24,6 +25,11 @@ public:
 	int intBetween(int min, int max) {
 		std::uniform_int_distribution<int> range(min, max);
 		return range(engine);
+	}
+
+	std::vector<int> randomVector(std::vector<int> allays){
+		std::shuffle(allays.begin(),allays.end(),engine);
+		return allays;
 	}
 
 };

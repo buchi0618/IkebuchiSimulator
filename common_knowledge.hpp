@@ -35,6 +35,7 @@ public:
 	int adjCellOf(int, std::string);	// 特定セルの隣接セルID（方向指定）
 	std::vector<int> getAdjCells(int);	// あるセルに隣接しているセル群のID
 	int getDistance(int, int);	// セル間の距離
+	int getDirection(int,int);//セルの位置
 	void setexsistuav(UAV);
 	bool exsistuav(int);//特定のセルにUAVがいるかどうか
 
