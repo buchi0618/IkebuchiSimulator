@@ -29,6 +29,7 @@ class Parameters
 	std::string coverageVariFilePath;
 	std::string impcoverageFilePath;
 	std::string impAreanumsFilePath;
+	std::string visittimenumFilePath;
 
 	// 設定ファイルを読み込んでパラメータを設定
 	void setFromIniFile(std::string);
@@ -55,6 +56,7 @@ public:
 	std::string getCoverageVariFilePath(){ return coverageVariFilePath;}
 	std::string getImpCoveragefilePath(){ return impcoverageFilePath;}
 	std::string getimpAreaNumsFilePath(){ return impAreanumsFilePath;}
+	std::string getVisittimenumFilePath(){ return visittimenumFilePath;}
 	int getCellNum() { return cellCols * cellRows; }
 	double getthreshold(){ return threshold; }
 

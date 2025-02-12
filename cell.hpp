@@ -14,6 +14,7 @@ class Cell
     int id;
     double coverage;  //カバレッジ値[0, 1]
     unsigned int area = 0; //0:普通のセル、1:重点探索エリア
+    int Vtime = 0;//訪れた回数
     std::vector<int> nbrCells; //隣接セル群のID
 
 public:
@@ -27,6 +28,7 @@ public:
     double getCoverage(){ return coverage; }
     std::vector<int> getNbrCells(){ return nbrCells; }
     unsigned int getArea(){ return area;}
+    int getVtime(){ return Vtime;}
 
     //setter
     void setID(int i){ id = i; }

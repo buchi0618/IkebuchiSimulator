@@ -27,7 +27,7 @@ void UAV::move() {
 	// とりあえずランダムウォーク
 	switch (mMode) {
 	case MMode::STOP:
-		mMode = MMode::MOVEIKEBUCHI;
+		mMode = MMode::MOVEITO;
 	case MMode::RANDOMWALK:
 		moveRandomWalk();
 		break;
@@ -324,6 +324,9 @@ void UAV::moveito(){
 
 void UAV::moveikebuchi(){
 	//
+	double diff = 1.00 - params.getthreshold();
+	double backline = params.getthreshold() + (params.getCovAttenuation() * diff );
+	
 	if(TcCellnum < 0){
 		std::vector<int> adjs = cKnow.getAdjCells(curCell);//現在地の隣接セル
 		std::vector<double> adjsCov;//隣接セルのカバレッジの値
@@ -359,11 +362,11 @@ void UAV::moveikebuchi(){
 			}
 		}
 	}else{
-		if(coverageMap[TcCellnum] < params.getthreshold()){
+		if(coverageMap[TcCellnum] < backline){
 			int direction = cKnow.getDirection(curCell,TcCellnum);
 			std::cout << "重点探索エリア"<<TcCellnum<<"は閾値を下回っています" << std::endl; 
-			std::cout << "現在地は" << curCell << "です" << std::endl;
-			std::cout << "位置は" << direction << "です"<< std::endl;
+			//std::cout << "現在地は" << curCell << "です" << std::endl;
+			//std::cout << "位置は" << direction << "です"<< std::endl;
 			
 			std::vector<std::pair<double,int>> movepriorities;
 			int Cellnum;

@@ -25,6 +25,7 @@ void Cell::attenuateCoverage(){
  */
 void Cell::UAVarrived() {
 	coverage = 1;
+    Vtime += 1;
 }
 void Cell::UAVarrived(int u) {
 	coverage = 1;

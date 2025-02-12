@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
     //     }
     // }
 
-    std::ofstream tempFile("temp_data.txt");
+    std::ofstream tempFile("output/Vari_data.txt");
     if (!tempFile.is_open()) {
         std::cerr << "Failed to create temp file." << std::endl;
         return 1;
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]){
     gnuplotScript << "set xtics 50\n";
     gnuplotScript << "set grid ytics lt 0 lc rgb '#7d7d7d'\n";
     gnuplotScript << "set ytics 0.1\n";
-    gnuplotScript << "plot 'temp_data.txt' using 1:2 with lines title 'Log Data'\n";
+    gnuplotScript << "plot 'output/Vari_data_IKEBUCHI.txt' using 1:2 with lines title '提案手法','output/Vari_data_ITO.txt' using 1:2 with lines title '先行手法'\n";
     //gnuplotScript << "pause -1\n"; // グラフを表示したままにする
     gnuplotScript << "set output\n";
     gnuplotScript.close();

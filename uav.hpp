@@ -31,7 +31,8 @@ class UAV
 	// uav-cellinfo: セル情報関係 ///////////////////////////
 	int TcCellnum = -1;//担当する重点探索エリアの番号
 	std::vector<double> coverageMap;	// coverageMap
-	std::vector<unsigned int> Areainfo;
+	std::vector<int> Areainfo;
+	//std::vector<int> impAreanum;
 	std::vector<int> UavAssignment;		// 担当マップ：各セルを担当しているUAVの情報
 
 public:
@@ -72,6 +73,7 @@ public:
 	void attenuateCovMap();	// カバレッジマップ上でカバレッジ減衰
 	double covAve(int start, int end);
 	void shareCovmap(UAV &uav1,UAV &uav2);//カバレッジ共有
+	void shareimpArea(UAV &uav);//重点探索エリアの共有
 	double minadjscov(int num);//隣接セルの最小値を出力する
 	static bool comparePairs(std::pair<double, int>& a,std::pair<double,int>& b);
 	std::vector<int> getSymmetricDifference(const std::vector<int>& array1, const std::vector<int>& array2);

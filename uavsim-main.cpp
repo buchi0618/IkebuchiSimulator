@@ -36,12 +36,14 @@ void runSim(unsigned int round) {
 	std::string coverageVariFilename = params.getCoverageVariFilePath() + std::to_string(round) + ".log";
 	std::string impcoveragefilename = params.getImpCoveragefilePath() + std::to_string(round) + ".log";
 	std::string impAreanumsFilename = params.getimpAreaNumsFilePath() + std::to_string(round) + ".log";
+	std::string visittimenumFilename = params.getVisittimenumFilePath() + std::to_string(round) + ".log";
 	fWriter.openFile(coverageLogFileName);
 	fWriter.openFile(uavLocLogFileName);
 	fWriter.openFile(coverageAveFilename);
 	fWriter.openFile(coverageVariFilename);
 	fWriter.openFile(impcoveragefilename);
 	fWriter.openFile(impAreanumsFilename);
+	fWriter.openFile(visittimenumFilename);
 
 	// セル数を初期化
 	std::vector<Cell> cells(params.getCellNum());
@@ -111,6 +113,8 @@ void runSim(unsigned int round) {
 				//std::cout << "\n i:"<< uavs[i].getCurCell() << ", j:"<<uavs[j].getCurCell();
 				uavs[i].shareCovmap(uavs[i],uavs[j]);
 				uavs[j].shareCovmap(uavs[j],uavs[i]);
+				uavs[i].shareimpArea(uavs[j]);
+				uavs[j].shareimpArea(uavs[i]);
 				//std::cout << "\n通信完了 : "<< uavs[i].getID() <<" , " << uavs[j].getID();
 			}
 			
@@ -141,6 +145,12 @@ void runSim(unsigned int round) {
 			log += "\t" + to_string(c.getCoverage());
 		}
 		fWriter.writeLine(coverageLogFileName, log);
+
+		log = "";
+		for (auto &c : cells) {
+			log += "\t" + to_string(c.getVtime());
+		}
+		fWriter.writeLine(visittimenumFilename, log);
 		//uavが持っているカバレッジマップ
 		log = ""; 
 		for(auto &c : uavs){
@@ -198,6 +208,7 @@ void runSim(unsigned int round) {
 	fWriter.closeFile(coverageVariFilename);
 	fWriter.closeFile(impcoveragefilename);
 	fWriter.closeFile(impAreanumsFilename);
+	fWriter.closeFile(visittimenumFilename);
 	//std::cout <<"\n covrageAve: "<<god.generateCovaverage(cells);
 	//std::cout <<"\n covrageVari: "<<god.generateCovvariance(cells);
 }

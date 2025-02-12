@@ -84,6 +84,8 @@ void Parameters::setFromIniFile(std::string filename) {
 		impcoverageFilePath = _impcoverageFilePath.get();
 	if (boost::optional<string> _impAreanumsFilePath = pt.get_optional<string>("file.impAreanumsFilePath"))
 		impAreanumsFilePath = _impAreanumsFilePath.get();
+	if (boost::optional<string> _visittimenumFilePath = pt.get_optional<string>("file.visittimenumFilePath"))
+	visittimenumFilePath = _visittimenumFilePath.get();
 #ifdef DEBUG
 	cout << "\nend: Parameters::setFromIniFile()";
 #endif

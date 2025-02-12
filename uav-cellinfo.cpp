@@ -13,14 +13,15 @@
  * @brief 初期化
  */
 void UAV::init_cellInfo() {
+	//std::cout << "CellNum: " << params.getCellNum() << std::endl;
 	// カバレッジマップは全セル0で初期化
 	coverageMap.resize(params.getCellNum());
 	for (auto &c : coverageMap) { c = 0.0; }
 
-	// 担当マップは全セル自分で初期化
+	//担当マップは全セル自分で初期化
 	UavAssignment.resize(params.getCellNum());
-	for (auto &c : UavAssignment) { c = id; }
-
+	for (auto &c : UavAssignment) { c = -1; }
+	
 	//エリア情報は全セル自分で初期化
 	Areainfo.resize(params.getCellNum());
 	for (auto &c : Areainfo){ c = 0; }
@@ -97,6 +98,33 @@ void UAV::shareCovmap(UAV &uav1,UAV &uav2){
 	//std::cout << "通信完了！"<< std::endl;
 }
 
+
+/**
+ * @brief 担当する重要探索エリアの更新
+ */
+void UAV::shareimpArea(UAV &uav){
+	if(TcCellnum == uav.TcCellnum && id < uav.getID()){
+		//std::cout << "UAV"<< id<<",UAV"<<uav.getID() <<"は担当かぶっていたので,低いほうに譲ります" <<std::endl; 
+		uav.TcCellnum = -2;
+	}else if(uav.TcCellnum > 0){
+		UavAssignment[uav.TcCellnum] = uav.getID();//どのセルを担当しているか更新
+	}
+	
+	if(uav.TcCellnum < 0){
+		for(unsigned int i = 0; i < Areainfo.size();i++){
+			if(Areainfo[i] == 1){
+				if(UavAssignment[i] < 0 && uav.UavAssignment[i] < 0){
+				uav.TcCellnum = i;
+				UavAssignment[i] = uav.getID(); 
+				std::cout <<"UAV"<<uav.getID()<<"は担当を持っていなかったので"<< "UAV"<< id<<"が共有しました"<<std::endl;
+				break; 
+			}
+			}
+			
+		}
+	}
+
+}
 
 
 double UAV::minadjscov(int num){
@@ -175,12 +203,15 @@ double UAV::minadjscov(int num){
 
 void UAV::setAreainfo(Cell cell){
 	if(cell.getArea() == 1){
-		Areainfo[cell.getId()] = cell.getArea();
+		Areainfo[cell.getId()] = 1;
 		if(TcCellnum < 0){
 			TcCellnum = cell.getId();
+			UavAssignment[TcCellnum] = id;
+			std::cout << "\nUAV"<< id <<"が担当する重点探索エリアは :"<< TcCellnum<<"です";
 		}
-		std::cout << "\nUAVが到着した重点探索エリアは :"<< cell.getId()<<"です";
-		std::cout << "\nUAV"<< id <<"が担当する重点探索エリアは :"<< TcCellnum<<"です";
+		//impAreanum.push_back(cell.getId());
+		//std::cout << "\nUAVが到着した重点探索エリアは :"<< cell.getId()<<"です";
+		//std::cout << "\nUAV"<< id <<"が担当する重点探索エリアは :"<< TcCellnum<<"です";
 	}
 	
 }

@@ -40,3 +40,38 @@ $(TARGET3): $(OBJS3)
 clean:
 	$(RM) $(TARGET3) $(OBJS3)
 
+TARGET4 = mergegraph
+SRCS4 = mergegraph.cpp parameters.cpp
+OBJS4 = $(SRCS4:.cpp=.o)
+
+all: $(TARGET4)
+
+$(TARGET4): $(OBJS4)
+	$(CXX) -o $@ $(OBJS4)
+	
+clean:
+	$(RM) $(TARGET4) $(OBJS4)
+
+TARGET5 = graphimpAve
+SRCS5 = graphimpAve.cpp parameters.cpp
+OBJS5 = $(SRCS5:.cpp=.o)
+
+all: $(TARGET5)
+
+$(TARGET5): $(OBJS5)
+	$(CXX) -o $@ $(OBJS5)
+	
+clean:
+	$(RM) $(TARGET5) $(OBJS5)
+
+TARGET6 = vtime
+SRCS6 = vtime.cpp parameters.cpp
+OBJS6 = $(SRCS6:.cpp=.o)
+
+all: $(TARGET6)
+
+$(TARGET6): $(OBJS6)
+	$(CXX) -o $@ $(OBJS6)
+	
+clean:
+	$(RM) $(TARGET6) $(OBJS6)

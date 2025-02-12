@@ -188,7 +188,7 @@ int main(int argc, char* argv[]){
     }
     //    
     // 整形済みデータを一時ファイルに書き込む
-    std::ofstream tempFile("temp_data.txt");
+    std::ofstream tempFile("output/Ave_data.txt");
     if (!tempFile.is_open()) {
         std::cerr << "Failed to create temp file." << std::endl;
         return 1;
@@ -214,7 +214,7 @@ int main(int argc, char* argv[]){
     gnuplotScript << "set yrange[0:1]\n";
     gnuplotScript << "set grid ytics lt 0 lc rgb '#7d7d7d'\n";
     gnuplotScript << "set ytics 0.2\n";
-    gnuplotScript << "plot 'temp_data.txt' using 1:2 with lines title 'Nomal area and Important area'\n";//, 'temp_data.txt' using 1:3 with lines title 'Important area','temp_data.txt' using 1:4 with lines title 'Nomal area'\n";
+    gnuplotScript << "plot 'output/Ave_data.txt' using 1:2 with lines title 'Nomal area and Important area', 'output/Ave_data.txt' using 1:3 with lines title 'Important area','output/Ave_data.txt' using 1:4 with lines title 'Nomal area'\n";
     //gnuplotScript << "pause -1\n"; // グラフを表示したままにする
     gnuplotScript << "set output\n";
     gnuplotScript.close();
@@ -223,7 +223,7 @@ int main(int argc, char* argv[]){
     system("gnuplot gnuplot_script.gp");
 
     // 一時ファイルを削除（必要に応じて）
-    std::remove("temp_data.txt");
+    //std::remove("temp_data.txt");
     std::remove("gnuplot_script.gp");
 
     return 0;
