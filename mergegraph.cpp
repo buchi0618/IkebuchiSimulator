@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
     gnuplotScript << "set grid ytics lt 0 lc rgb '#7d7d7d'\n";
     gnuplotScript << "set ytics 0.2 font 'Arial, 20'\n";
     // gnuplotScript << "set yrange[0:0.3]\n";
-    gnuplotScript << "plot 'output/Ave_data_IKEBUCHI_imp5.txt' using 1:3 with lines lw 2 title '提案手法', 'output/Ave_data_ITO_imp5.txt' using 1:3 with lines dashtype '--' lw 2  title '先行手法'\n";
+    gnuplotScript << "plot 'output/Ave_data_IKEBUCHI_s0.6.txt' using 1:3 with lines lw 2 title '提案手法', 'output/Ave_data_ITO_1.25.txt' using 1:3 with lines dashtype '--' lw 2  title '先行手法'\n";
     //gnuplotScript << "pause -1\n"; // グラフを表示したままにする
     gnuplotScript << "set output\n";
     gnuplotScript << "set terminal pngcairo size 360,492\n";
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
     gnuplotScript << "set ylabel 'Average Coverage' font 'Arial,20'\n";
     gnuplotScript << "set yrange[0:1]\n";
     gnuplotScript << "set grid ytics lt 0 lc rgb '#7d7d7d'\n";
-    gnuplotScript << "plot'output/Ave_data_IKEBUCHI_imp5.txt' using 1:2 with lines lw 2 title '提案手法', 'output/Ave_data_ITO_imp5.txt' using 1:2 with lines dashtype '--' lw 2 title '先行手法'\n";
+    gnuplotScript << "plot'output/Ave_data_IKEBUCHI_s0.6.txt' using 1:2 with lines lw 2 title '提案手法', 'output/Ave_data_ITO_1.25.txt' using 1:2 with lines dashtype '--' lw 2 title '先行手法'\n";
     gnuplotScript << "set output\n";
     gnuplotScript.close();
 

@@ -21,14 +21,31 @@ void Parameters::parseCmdline(int argc, char* argv[]) {
 	cmdline::parser cmdParser;
 
 	// パラメータ設定に関する引数を引っこ抜いてくる
+	//std::cout << "Registering 'ini' option..." << std::endl;
 	cmdParser.add<string>("ini", '\0', "parameter ini-file name", false);	// 環境設定ファイル
+	//std::cout << "'ini' option registered." << std::endl;
 	//
 	// 他に使いたい引数があればここに追記
 	//
+	// for (int i = 0; i < argc; i++) {
+	// 	std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
+	// }
+	
 	cmdParser.parse_check(argc, argv);
-
 	// コマンドライン引数でiniファイルが指定されていれば、その記載箇所のみデフォルト値から変更
-	if (cmdParser.get<string>("ini") != "") { setFromIniFile(cmdParser.get<string>("ini")); }
+	std::cout << "\ncmdparser.get:"<<cmdParser.get<string>("ini") << std::endl;
+	if (cmdParser.exist("ini")) {
+		std::string iniFile = cmdParser.get<string>("ini");
+		std::cout << "ini file: " << iniFile << std::endl;
+	} else {
+		std::cout << "No ini file specified." << std::endl;
+	}
+
+	if (cmdParser.get<string>("ini") != "") {  setFromIniFile(cmdParser.get<string>("ini")); 
+	}
+
+	std::cout << "起動" << std::endl;
+
 	//
 	// 他に使いたい引数があればここに追記
 	//
@@ -68,7 +85,9 @@ void Parameters::setFromIniFile(std::string filename) {
 		threshold = _threshold.get();
 	if (boost::optional<int> _impAreaNum = pt.get_optional<int>("env.impAreaNum"))
 		impAreaNum = _impAreaNum.get();
-
+	if (boost::optional<double> _covARatio = pt.get_optional<double>("env.coverageARatio"))
+		coverageAttenuationRatio = _covARatio.get();	
+		
 	// [file]
 	if (boost::optional<string> _coverageLogFilePath = pt.get_optional<string>("file.coverageLogFilePath"))
 		coverageLogFilePath = _coverageLogFilePath.get();

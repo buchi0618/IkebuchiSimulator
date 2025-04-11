@@ -19,6 +19,7 @@ class Parameters
 	unsigned int uavMoveLogNum;	// UAVの移動ログ記録セル数
 	int cellCols, cellRows;	// セル数（x方向、y方向）
 	double coverageAttenuation; // カバレッジの減衰量／ターン
+	double coverageAttenuationRatio;
 	double threshold; //閾値
 
 	// [file] 入出力ファイル関係
@@ -48,6 +49,7 @@ public:
 	int getCellCols() { return cellCols; }
 	int getCellRows() { return cellRows; }
 	double getCovAttenuation() { return coverageAttenuation; }
+	double getCovAttenuationRatio() { return coverageAttenuationRatio; }
 	int getimpAreaNum(){ return impAreaNum;}
 	std::string getCoverageLogFilePath() { return coverageLogFilePath; }
 	std::string getUavLocLogFilePath() { return uavLocLogFilePath; }

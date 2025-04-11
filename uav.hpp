@@ -62,8 +62,6 @@ public:
 	void moveRoundTrip();	// 往復移動
 	void pushMoveLog(unsigned int);	// 移動ログにセルを追加
 	void moveNextlowcell();
-	void movenomal();
-	void moveLowcoverage(); //平均カバレッジが低い方向へ移動
 	void moveito();
 	void moveikebuchi();
 

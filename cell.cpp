@@ -12,7 +12,7 @@ void Cell::attenuateCoverage(){
     if(area == 0 ){
         coverage -= params.getCovAttenuation();
     }else{
-        coverage -= params.getCovAttenuation() * 2.0;
+        coverage -= params.getCovAttenuation() * 1.25;
         //std::cout << "大幅減衰！\n";
     }
     if (coverage < 0){ coverage = 0; }

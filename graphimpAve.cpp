@@ -214,7 +214,7 @@ int main(int argc, char* argv[]){
     gnuplotScript << "set yrange[0:1]\n";
     gnuplotScript << "set grid ytics lt 0 lc rgb '#7d7d7d'\n";
     gnuplotScript << "set ytics 0.2\n";
-    gnuplotScript << "plot 'output/temp_data.txt' using 1:3 with lines title '提案手法','output/temp_data_ITO.txt' using 1:3 with lines title '先行研究'\n";
+    gnuplotScript << "plot 'output/Ave_data_IKEBUCHI.txt' using 1:3 with lines title '提案手法','output/temp_data_ITO.txt' using 1:3 with lines title '先行研究'\n";
     //gnuplotScript << "pause -1\n"; // グラフを表示したままにする
     gnuplotScript << "set output\n";
     gnuplotScript.close();

@@ -9,7 +9,7 @@ OBJS = $(SRCS:.cpp=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) -o $@ $(OBJS)
+	$(CXX) -g -o $@ $(OBJS)
 	
 clean:
 	$(RM) $(TARGET) $(OBJS)

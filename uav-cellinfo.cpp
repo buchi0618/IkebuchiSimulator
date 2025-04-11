@@ -53,7 +53,7 @@ void UAV::attenuateCovMap() {
 				coverageMap[c] -= params.getCovAttenuation();
 				if (coverageMap[c] < 0) { coverageMap[c] = 0; }
 			}else if(Areainfo[c] == 1){
-				coverageMap[c] -= params.getCovAttenuation() * 2.0;
+				coverageMap[c] -= params.getCovAttenuation() * 1.25;
 				if(coverageMap[c] < 0) { coverageMap[c] = 0;}
 			}else{
 				std::cout <<"errer";
